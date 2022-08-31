@@ -1,0 +1,35 @@
+A method that takes an array of integers, and returns a new array with every other element from the original array, starting with the first element: casual pseudo-code
+
+Given an array of integers.
+
+Create a new, empty array.
+Create a counter and set it equal to zero.
+
+Iterate through the array of integers.
+  - increase the counter's value by 1.
+  - if the counter is an odd number, push the element's value to the new array.
+  - but if the counter is an even number, move on to the next iteration.
+
+Once the array of integers has been iterated through, return the new array.
+
+--------------------------------------------------------------------------------
+
+A method that takes an array of integers, and returns a new array with every other element from the original array, starting with the first element: formal pseudo-code
+
+START
+
+# Given an array of integers called "int_arr"
+
+SET new_arr = empty array
+SET iterator = 0
+
+LOOP DO...END invoke Array#each on int_arr
+  iterator = iterator + 1
+  IF iterator == odd
+    invoke Array#push on new_arr and pass in the current element as the argument
+  ELSE
+    go to the next iteration
+
+PRINT new_arr
+
+END

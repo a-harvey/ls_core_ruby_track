@@ -1,0 +1,24 @@
+A method that takes two arrays of numbers and returns the result of merging the arrays. The elements of the first array should become the elements at the even indexes of the returned array, while the elements of the second array should become the elements at the odd indexes: casual pseudo-code
+
+Given two arrays of integers with the same number of elements.
+
+Call Array#zip on the first array, passing in the second array as the argument, storing the result into a new merged array.
+
+Invoke Array#flatten! on this new array.
+
+Return this new array.
+
+--------------------------------------------------------------------------------
+
+A method that takes two arrays of numbers and returns the result of merging the arrays. The elements of the first array should become the elements at the even indexes of the returned array, while the elements of the second array should become the elements at the odd indexes: formal pseudo-code
+
+START
+
+# Given two arrays of integers called "arr_int1" and "arr int2" with the same 
+# number of elements.
+
+SET arr_int3 = the evaluated result of first invoking Array#zip on arr_int1 with arr_int2 as its argument, and then chaining Array#flatten! on the evaluated result of that expression.
+
+PRINT arr_int3
+
+END

@@ -1,0 +1,39 @@
+A method that determines the index of the 3rd occurrence of a given character in a string; if the given character does not occur at least 3 times, return nil: casual pseudo-code
+
+Given a string.
+Given a character.
+
+Create a variable for the number of occurrences and set it equal to 3.
+Create a given-variable occurrence counter and set it equal to zero.
+
+Iterate through the string.
+  - if the element in the string matches the given character, add 1 to the    
+    given-variable occurrence counter.
+    - if the given-variable counter is equal to 3, return the index.
+  - but if the element in the string doesn't match the given character, move on 
+    to the next iteration.
+
+Return nil.
+
+--------------------------------------------------------------------------------
+
+A method that determines the index of the 3rd occurrence of a given character in a string; if the given character does not occur at least 3 times, return nil: formal pseudo-code
+
+START
+
+# Given a string called "given_str"
+# Given a character called "given_char"
+
+SET occur = 0
+
+LOOP DO... END invoke String#given_char on given_str, and to this evaluated result chain a method call to Enumerator#with_index, passing in the String element as "char" and its index as "idx" for the arguments
+  IF char == given_char
+    occur = occur + 1
+    IF occur == 3
+      PRINT idx
+  ELSE
+    go to the next iteration
+
+PRINT nil
+
+END

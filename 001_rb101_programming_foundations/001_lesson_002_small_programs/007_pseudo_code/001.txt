@@ -1,0 +1,21 @@
+A method that returns the sum of two integers: casual pseudo-code
+
+Given two integers.
+
+Store the sum of the two integers provided as method arguments into a new variable.
+
+Return the saved value of this new variable.
+
+--------------------------------------------------------------------------------
+
+A method that returns the sum of two integers: formal pseudo-code
+
+START
+
+# Given two integers
+
+SET numsum = sum of first integer argument and second integer argument
+
+PRINT numsum
+
+END

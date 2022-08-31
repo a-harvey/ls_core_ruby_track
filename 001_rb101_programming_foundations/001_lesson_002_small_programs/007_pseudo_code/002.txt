@@ -1,0 +1,21 @@
+A method that takes an array of strings, and returns a string that is all those strings concatenated together: casual pseudo-code
+
+Given an array of strings.
+
+Create a variable that stores the result of calling the #Array.join method on the array of strings.
+
+Return the string made up of the concatenated strings.
+
+--------------------------------------------------------------------------------
+
+A method that takes an array of strings, and returns a string that is all those strings concatenated together: formal pseudo-code
+
+START
+
+# Given an array of strings called "str_arr"
+
+SET new_str = invoke Array#join on str_arr
+
+PRINT new_str
+
+END
