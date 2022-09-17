@@ -1,0 +1,45 @@
+en:
+  welcome: "Welcome to Calculator! Enter your name:"
+  valid_name: "Make sure to enter a valid name."
+  hello: "Hi, "
+  first_num: "What's the first number?"
+  valid_num: "Hmm... that doesn't look like a valid number."
+  second_num: "What's the second number?"
+  operator_prompt: >
+    What operation would you like to perform?
+      1) add
+      2) subtract
+      3) multiply
+      4) divide
+  op_choice: "Must choose 1, 2, 3, or 4."
+  op_verb1: "Adding"
+  op_verb2: "Subtracting"
+  op_verb3: "Multiplying"
+  op_verb4: "Dividing"
+  op_calc: " the two numbers..."
+  op_result: "The result is "
+  calc_again: "Do you want to perform another calculation? ('Y' to calculate again)"
+  goodbye: "Thank you for using the calculator. Goodbye!"
+
+de:
+  welcome: "Wilkommen bei Calculator! Geben Sie Ihren Namen ein:"
+  valid_name: "Stellen Sie sicher, dass Sie einen gueltigen Namen eingeben."
+  hello: "Hallo, "
+  first_num: "Wie lautet die erste Zahl?"
+  valid_num: "Hmm... das sieht nicht nach einer gueltigen Zahl aus."
+  second_num: "Wie lautet die zweite Zahl?"
+  operator_prompt: >
+    Welche Operation moechten Sie durchfuehren?
+      1) Addieren
+      2) Abziehen
+      3) Multiplizieren
+      4) Teilen
+  op_choice: "Sie muessen 1, 2, 3, oder 4 waehlen."
+  op_verb1: "Addieren"
+  op_verb2: "Abziehen"
+  op_verb3: "Multiplizieren"
+  op_verb4: "Teilen"
+  op_calc: " ist das, was wir mit den beiden Zahlen machen."
+  op_result: "Das Ergebnis ist "
+  calc_again: "Moechten Sie eine weitere Berechnung durchfuehren? ('Y', um erneut zu rechnen)"
+  goodbye: "Vielen Dank fuer die Nutzung des Rechners. Auf Wiedersehen!"
