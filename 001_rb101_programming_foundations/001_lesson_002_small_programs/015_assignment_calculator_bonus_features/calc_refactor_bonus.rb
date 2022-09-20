@@ -1,13 +1,12 @@
 require 'yaml'
 
-# Load the YAML file containing the program's prompt strings and translations
 MESSAGES = YAML.load_file('reorganizing_calculator_messages.yml')
 # Set the program's language to English ('en') or German ('de')
 LANGUAGE = 'en'
 
-# Execute the bulk of the program's submethods
 def calculate
   loop do
+    puts ''
     num1 = get_num('first_num')
     num2 = get_num('second_num')
     op = choose_operation
@@ -18,22 +17,19 @@ def calculate
   end
 end
 
-# Pull the prompted text in the correct language from the YAML file
 def messages(message, _lang)
   MESSAGES[LANGUAGE][message]
 end
 
-# Print to the screen the contents of the specific string from the YAML file
 def prompt(message)
   puts("=> #{message}")
 end
 
-# Get a valid name from the user
 def get_name
   prompt(messages('welcome', LANGUAGE))
   name = ''
   loop do
-    name = gets.chomp
+    name = gets.strip.chomp
     if name.empty? || integer?(name)
       prompt(messages('valid_name', LANGUAGE))
     else
@@ -43,11 +39,10 @@ def get_name
   prompt(messages('hello', LANGUAGE) + "#{name}!")
 end
 
-# Get a valid number from the user
 def get_num(num_prompt)
   loop do
     prompt(messages(num_prompt, LANGUAGE))
-    num = gets.chomp
+    num = gets.strip.chomp
     if valid_number?(num)
       return num
     else
@@ -56,27 +51,23 @@ def get_num(num_prompt)
   end
 end
 
-# Check that the number from the user is valid
 def valid_number?(num)
   integer?(num) || float?(num)
 end
 
-# Check to see if the user's number is an integer
 def integer?(num)
   num.to_i.to_s == num
 end
 
-# Check to see if the user's number is a float
 def float?(num)
   num.to_f.to_s == num
 end
 
-# Ask the user for a valid operator choice
 def choose_operation
   prompt(messages('operator_prompt', LANGUAGE))
   operator = ''
   loop do
-    operator = gets.chomp
+    operator = gets.strip.chomp
     if %w(1 2 3 4).include?(operator)
       break
     else
@@ -86,7 +77,6 @@ def choose_operation
   operator
 end
 
-# Print to the screen which operation is being performed on the valid numbers
 def operation_to_message(op)
   symbol = case op
            when '1'
@@ -101,7 +91,6 @@ def operation_to_message(op)
   prompt(symbol.to_s + messages('op_calc', LANGUAGE))
 end
 
-# Calculate and print to the screen the result of the calculation
 def outcome(op, num1, num2)
   result = case op
            when '1'
@@ -116,18 +105,25 @@ def outcome(op, num1, num2)
   prompt(messages('op_result', LANGUAGE) + result.to_s + '.')
 end
 
-# Ask the user if they'd like to make another calculation
 def again?
-  prompt(messages('calc_again', LANGUAGE))
-  gets.downcase.chomp
+  answer = ''
+  loop do
+    prompt(messages('calc_again', LANGUAGE))
+    answer = gets.strip.downcase.chomp
+    if %w(y yes no n).include?(answer)
+      break
+    else
+      prompt(messages('clarify_response', LANGUAGE))
+    end
+  end
+  answer
 end
 
-# Bid the user farewell when they choose to exit the program
 def goodbye
   prompt(messages('goodbye', LANGUAGE))
 end
 
-# The main body of the program
+system("clear")
 get_name
 calculate
 goodbye

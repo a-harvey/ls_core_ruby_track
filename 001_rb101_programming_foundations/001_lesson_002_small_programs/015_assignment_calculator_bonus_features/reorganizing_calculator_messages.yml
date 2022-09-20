@@ -18,7 +18,8 @@ en:
   op_verb4: "Dividing"
   op_calc: " the two numbers..."
   op_result: "The result is "
-  calc_again: "Do you want to perform another calculation? ('Y' to calculate again)"
+  calc_again: "Do you want to perform another calculation? ('Y'/'YES' to calculate again, or 'N'/'NO' to exit.)"
+  clarify_response: "Hmm... that doesn't look like a valid response."
   goodbye: "Thank you for using the calculator. Goodbye!"
 
 de:
@@ -41,5 +42,6 @@ de:
   op_verb4: "Teilen"
   op_calc: " ist das, was wir mit den beiden Zahlen machen."
   op_result: "Das Ergebnis ist "
-  calc_again: "Moechten Sie eine weitere Berechnung durchfuehren? ('Y', um erneut zu rechnen)"
+  calc_again: "Moechten Sie eine weitere Berechnung durchfuehren? (Druecken Sie 'Y'/'YES', um eine weitere Berechnung durchzufuehren, oder druecken Sie 'N'/'NO', um das Programm zu beenden.)"
+  clarify_response: "Hmm... das sieht nicht nach einer gueltigen Antwort aus."
   goodbye: "Vielen Dank fuer die Nutzung des Rechners. Auf Wiedersehen!"
