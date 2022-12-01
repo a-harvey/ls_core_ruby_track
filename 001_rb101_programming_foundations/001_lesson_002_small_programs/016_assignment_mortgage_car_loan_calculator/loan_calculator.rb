@@ -3,15 +3,16 @@ require 'yaml'
 MESSAGES = YAML.load_file('loan_calculator_messages.yml')
 
 def calculate_loan
+  puts ''
   prompt(messages('welcome'))
   loop do
-    amt = get_loan_amt('loan_amount')
+    amount = get_loan_amount('loan_amount')
     apr = get_loan_apr('annual_percentage_rate')
-    int_rate = apr_to_monthly_interest(apr)
-    full_loan_dur = get_full_loan_dur
-    owed_monthly = calc_formula(amt, int_rate, full_loan_dur)
+    interest = apr_to_monthly_interest(apr)
+    duration = get_full_loan_duration
+    owed_monthly = calculate_owed(amount, interest, duration)
     add_zero(owed_monthly)
-    answer = again?
+    answer = again
     break unless answer.match?(/(y|yes)/)
   end
   prompt(messages('goodbye'))
@@ -24,17 +25,19 @@ end
 def prompt(message)
   puts ''
   puts("=> #{message}")
+  puts ''
 end
 
-def get_loan_amt(loan_amt_prompt)
+def get_loan_amount(loan_amount_prompt)
   loop do
-    prompt(messages(loan_amt_prompt))
-    loan_amt_response = gets.strip.chomp
-    rm_extra_chars(loan_amt_response)
-    if validate(loan_amt_response) && loan_amt_response != '0'
-      return loan_amt_response
+    prompt(messages(loan_amount_prompt))
+    amount = gets.strip.chomp
+    remove_extra_characters(amount)
+    if validate(amount) && amount != '0'
+      system('clear')
+      return amount
     else
-      prompt(messages('valid_loan_amount'))
+      prompt(messages('invalid_loan_amount'))
     end
   end
 end
@@ -42,99 +45,98 @@ end
 def get_loan_apr(loan_apr_prompt)
   loop do
     prompt(messages(loan_apr_prompt))
-    loan_apr_response = gets.strip.chomp
-    rm_extra_chars(loan_apr_response)
-    if validate(loan_apr_response) && !loan_apr_response.match(/(^0$|.00*$)/)
-      return loan_apr_response
+    apr = gets.strip.chomp
+    remove_extra_characters(apr)
+    if validate(apr) && !apr.match(/(^(0|.0)+$)/) && apr.length <= 5
+      system('clear')
+      return apr
     else
-      prompt(messages('valid_loan_apr'))
+      prompt(messages('invalid_loan_apr'))
     end
   end
 end
 
-def get_full_loan_dur
-  prompt(messages('total_loan_dur_intro'))
+def get_full_loan_duration
+  prompt(messages('total_loan_duration_intro'))
   loop do
-    user_loan_years = get_loan_dur('total_loan_dur_years')
-    user_loan_months = get_loan_dur('total_loan_dur_months')
-    if integer?(user_loan_years) || integer?(user_loan_months)
-      prompt(messages('valid_loan_dur'))
+    loan_years = get_loan_duration('total_loan_duration_years')
+    loan_months = get_loan_duration('total_loan_duration_months')
+    duration = duration_to_months(loan_years) + loan_months.to_i
+    if duration == 0
+      prompt(messages('invalid_loan_duration'))
     else
-      dur = dur_to_months(user_loan_years) + user_loan_months.to_i
-      if dur == 0
-        prompt(messages('valid_loan_dur'))
-      else
-        return dur
-      end
+      return duration
     end
   end
 end
 
-def get_loan_dur(loan_dur_prompt)
+def get_loan_duration(loan_duration_prompt)
   loop do
-    prompt(messages(loan_dur_prompt))
-    loan_dur_response = gets.strip.chomp
-    rm_extra_chars(loan_dur_response)
-    if validate(loan_dur_response) && !loan_dur_response.match?(/\./)
-      return loan_dur_response
+    prompt(messages(loan_duration_prompt))
+    loan_duration = gets.strip.chomp
+    remove_extra_characters(loan_duration)
+    if validate(loan_duration) && !loan_duration.match?(/\./)
+      return loan_duration
     else
-      prompt(messages('valid_loan_dur'))
+      prompt(messages('invalid_loan_duration'))
     end
   end
 end
 
-def rm_extra_chars(user_input)
-  if user_input.match?(/[^\d.-]/)
-    user_input.gsub!(/[^\d.-]/, '')
+def remove_extra_characters(user_input)
+  if user_input.match?(/[^\w.-]/)
+    user_input.gsub!(/[^\w.-]/, '')
   else
     user_input
   end
 end
 
 def validate(user_input)
-  if user_input.match?(/-/)
-    prompt(messages('negative'))
-  else
-    user_input.match?(/[^\D]/)
-  end
+  ((float?(user_input) || integer?(user_input))) && !user_input.start_with?('-')
 end
 
-def integer?(user_dur_input)
-  user_dur_input.to_s.match?(/\./)
+def float?(user_input)
+  user_input.to_f.to_s == user_input || user_input.to_f.to_s + '0' == user_input
+end
+
+def integer?(user_input)
+  user_input.to_i.to_s == user_input
 end
 
 def apr_to_monthly_interest(user_apr)
   (user_apr.to_f / 100) / 12
 end
 
-def dur_to_months(user_dur_in_yrs)
-  user_dur_in_yrs.to_i * 12
+def duration_to_months(user_duration_in_years)
+  user_duration_in_years.to_i * 12
 end
 
-def calc_formula(amt, int_rate, full_loan_dur)
-  owed = amt.to_f * (int_rate / (1 - (1 + int_rate)**(-full_loan_dur)))
+def calculate_owed(amount, interest, duration)
+  system('clear')
+  owed = amount.to_f * (interest / (1 - (1 + interest)**(-duration)))
   owed.round(2).to_s.reverse.gsub(/(\d\d\d)(?=\d)/, '\\1,').reverse
 end
 
-def add_zero(amt_owed)
-  before_decimal, after_decimal = amt_owed.to_s.split('.')
+def add_zero(amount_owed)
+  before_decimal, after_decimal = amount_owed.to_s.split('.')
   if after_decimal.length == 1
     [before_decimal, after_decimal].join('.')
-    prompt(messages('monthly_payment') + amt_owed.to_s + '0.')
+    prompt(messages('monthly_payment') + amount_owed.to_s + '0.')
   else
-    prompt(messages('monthly_payment') + amt_owed.to_s + '.')
+    prompt(messages('monthly_payment') + amount_owed.to_s + '.')
   end
 end
 
-def again?
+def again
   answer = ''
   loop do
-    prompt(messages('another_calc'))
+    prompt(messages('another_calculation'))
     answer = gets.strip.downcase.chomp
-    if answer.match?(/(y|yes|n|no)/)
+    if answer.match?(/^[(y|yes|n|no)]+$/)
+      system('clear')
       break
     else
-      prompt(messages('valid_again_response'))
+      prompt(messages('invalid_again_response'))
     end
   end
   answer
