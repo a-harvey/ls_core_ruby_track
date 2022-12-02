@@ -33,7 +33,7 @@ def get_loan_amount(loan_amount_prompt)
     prompt(messages(loan_amount_prompt))
     amount = gets.strip.chomp
     remove_extra_characters(amount)
-    if validate(amount) && amount != '0'
+    if valid_number?(amount) && amount != '0'
       system('clear')
       return amount
     else
@@ -47,7 +47,7 @@ def get_loan_apr(loan_apr_prompt)
     prompt(messages(loan_apr_prompt))
     apr = gets.strip.chomp
     remove_extra_characters(apr)
-    if validate(apr) && !apr.match(/(^(0|.0)+$)/) && apr.length <= 5
+    if valid_number?(apr) && !apr.match(/(^(0|.0)+$)/) && apr.length <= 5
       system('clear')
       return apr
     else
@@ -75,7 +75,7 @@ def get_loan_duration(loan_duration_prompt)
     prompt(messages(loan_duration_prompt))
     loan_duration = gets.strip.chomp
     remove_extra_characters(loan_duration)
-    if validate(loan_duration) && !loan_duration.match?(/\./)
+    if valid_number?(loan_duration) && !loan_duration.match?(/\./)
       return loan_duration
     else
       prompt(messages('invalid_loan_duration'))
@@ -91,7 +91,7 @@ def remove_extra_characters(user_input)
   end
 end
 
-def validate(user_input)
+def valid_number?(user_input)
   ((float?(user_input) || integer?(user_input))) && !user_input.start_with?('-')
 end
 
