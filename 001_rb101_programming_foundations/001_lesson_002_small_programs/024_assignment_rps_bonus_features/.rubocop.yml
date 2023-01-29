@@ -1,4 +1,4 @@
-# .rubocop.yml for LS RB101 Lesson 002_024 (January 22, 2023)
+# .rubocop.yml for LS RB101 Lesson 002_024 refactoring (January 29, 2023)
 AllCops:
   # Display cop names
   DisplayCopNames: true

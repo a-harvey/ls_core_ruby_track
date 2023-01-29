@@ -17,55 +17,54 @@ OUTCOMES = {
 ROUNDS_TO_WIN = 3
 
 def prompt(message)
-  puts("")
+  puts('')
   puts("=> #{message}")
 end
 
-def greet_player
+def print_greeting
   prompt("Welcome to Rock Paper Scissors Lizard Spock...")
-  sleep(1.5)
+  sleep(1.3)
   prompt("where each move beats -- and is beaten by! --")
-  sleep(1.5)
+  sleep(1.3)
   prompt("TWO other moves.")
-  sleep(2)
+  sleep(1.3)
   prompt("You'll play against the computer.")
-  sleep(1.5)
-  prompt("The first to #{ROUNDS_TO_WIN} wins the match.")
-  sleep(2.5)
+  sleep(1.3)
+  prompt("The first to win #{ROUNDS_TO_WIN} rounds wins the match.")
+  sleep(2.1)
 end
 
 def print_rules
   prompt("Here's how to play:")
-  sleep(2)
+  sleep(1.5)
   OUTCOMES.each do |move, result|
     prompt("#{move.capitalize}:")
     sleep(1)
     prompt("1) #{result.values[0]} #{result.keys[0]}.")
     prompt("2) #{result.values[1]} #{result.keys[1]}.")
-    puts("")
-    sleep(2.5)
+    puts('')
+    sleep(2)
   end
 end
 
 def play_game
   loop do
-    player_wins = 0
-    computer_wins = 0
+    wins = { 'player' => 0, 'computer' => 0 }
 
-    until player_wins == ROUNDS_TO_WIN || computer_wins == ROUNDS_TO_WIN
+    until wins['player'] == ROUNDS_TO_WIN || wins['computer'] == ROUNDS_TO_WIN
       player_choice = resolve_player_move
       computer_choice = CHOICES.values.sample
+      print_selected_choices(player_choice, computer_choice)
 
-      play_round(player_choice, computer_choice)
+      round_winner = find_round_winner(player_choice, computer_choice)
+      update_wins(round_winner, wins)
 
-      player_wins += 1 if raise_player_wins?(player_choice, computer_choice)
-      computer_wins += 1 if raise_computer_wins?(computer_choice, player_choice)
-
-      print_wins(player_wins, computer_wins)
+      print_round_outcome(player_choice, computer_choice)
+      print_wins(wins)
     end
-    declare_final_winner(player_wins)
-    player_decision = ask_to_play_again
-    break unless player_decision == "y" || player_decision == "yes"
+
+    print_final_winner(wins)
+    break unless play_again?
   end
 end
 
@@ -74,9 +73,9 @@ def resolve_player_move
     move = choose_move
     return CHOICES[move] if valid?(move)
     prompt("That's not a valid choice.")
-    puts("")
+    puts('')
     sleep(1.5)
-    system("clear")
+    system('clear')
   end
 end
 
@@ -86,7 +85,7 @@ def choose_move
   CHOICES.each do |letter, full_word|
     prompt("Type '#{letter}' for '#{full_word}'.")
   end
-  puts("")
+  puts('')
   gets.downcase.chomp
 end
 
@@ -94,85 +93,90 @@ def valid?(move)
   CHOICES.include?(move)
 end
 
-def play_round(move, other_move)
+def print_selected_choices(move, other_move)
   sleep(0.5)
   prompt("You chose #{move}. The computer chose #{other_move}.")
-  sleep(1.5)
-  if move == other_move
-    prompt("It's a draw!")
+  sleep(0.8)
+end
+
+def find_round_winner(move, other_move)
+  if player_won?(move, other_move)
+    'player'
+  elsif player_won?(other_move, move)
+    'computer'
   else
-    print_round_winner(move, other_move)
+    'draw'
   end
 end
 
-def print_round_winner(player, other)
+def player_won?(move, other_move)
+  OUTCOMES[move].include?(other_move)
+end
+
+def update_wins(winner, match_scores)
+  if winner == 'player'
+    match_scores['player'] += 1
+  elsif winner == 'computer'
+    match_scores['computer'] += 1
+  else
+    match_scores
+  end
+end
+
+def print_round_outcome(player, other)
   if OUTCOMES[player][other]
     prompt("#{player.capitalize} #{OUTCOMES[player][other]} #{other}.")
-    sleep(1)
+    sleep(0.8)
     prompt("You won!")
-  else
+  elsif OUTCOMES[other][player]
     prompt("#{other.capitalize} #{OUTCOMES[other][player]} #{player}.")
-    sleep(1)
+    sleep(0.8)
     prompt("The computer won!")
+  else
+    prompt("It's a draw!")
   end
 end
 
-def raise_player_wins?(player, other)
-  OUTCOMES[player].include?(other)
-end
-
-def raise_computer_wins?(other, player)
-  OUTCOMES[other].include?(player)
-end
-
-def print_wins(player, other)
-  sleep(0.75)
-  prompt("Your score is #{player}.")
+def print_wins(match_scores)
   sleep(1)
-  prompt("The computer's score is #{other}.")
-  puts("")
+  prompt("Your score is #{match_scores['player']}.")
+  sleep(0.8)
+  prompt("The computer's score is #{match_scores['computer']}.")
+  puts('')
   sleep(1.5)
-  system("clear")
+  system('clear')
 end
 
-def declare_final_winner(score)
-  if score == 3
+def print_final_winner(match_score)
+  if match_score['player'] == 3
     prompt("You won the match!")
   else
     prompt("The computer won the match!")
   end
-  puts("")
-  sleep(1.5)
-  system("clear")
+  sleep(1)
+  prompt("Good game!")
+  sleep(1)
+  system('clear')
 end
 
-def ask_to_play_again
-  answer = ''
-  loop do
-    prompt("Would you like to play again? (Type 'yes' or 'no')")
-    puts("")
-    answer = gets.strip.downcase.chomp
-    if answer == "yes" || answer == "no"
-      break
-    else
-      prompt("That's an invalid response.")
-    end
-  end
-  system("clear")
-  answer
+def play_again?
+  prompt("Type 'y' or 'yes' if you'd like to play again:")
+  puts('')
+  answer = gets.strip.downcase.chomp
+  answer.match?(/(yes|y{1})$/)
 end
 
-def say_goodbye
+def print_goodbye
   prompt("Thank you for playing. Goodbye!")
   sleep(1.5)
 end
 
-system("clear")
-greet_player
-system("clear")
+system('clear')
+print_greeting
+system('clear')
 print_rules
-system("clear")
+system('clear')
 play_game
-system("clear")
-say_goodbye
-system("clear")
+system('clear')
+print_goodbye
+system('clear')
